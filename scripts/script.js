@@ -74,7 +74,7 @@ result.textContent = getBMI().toFixed(2);
       (ageRange.length > 1 && age >= ageRange[0] && age <= ageRange[1]) ||
       (ageRange.length == 1 && age >= ageRange[0].substring(2))
     ) {
-      ele.parentNode.style.backgroundColor = "lightgreen";
+      ele.parentNode.style.backgroundColor = "skyblue";
     }
   }
 
