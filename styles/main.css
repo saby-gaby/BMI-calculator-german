@@ -2,12 +2,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: poppins, sans-serif;
+  font-family: Poppins, sans-serif;
 }
 
 body {
   background-color: rgb(253, 247, 239);
   min-height: 100vh;
+  max-width: 1440px;
+  margin: 0 auto 0 auto;
 }
 body header h1 {
   color: rgb(128, 77, 143);
