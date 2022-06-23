@@ -89,7 +89,7 @@ body main #rechner #submit:hover {
 }
 body main section {
   width: 80%;
-  margin: 3rem auto;
+  margin: 3rem auto 1rem auto;
   display: flex;
   gap: 2rem;
   justify-content: center;
@@ -160,6 +160,18 @@ body main section table:nth-of-type(1), body main section table:nth-of-type(2), 
 body main section table caption {
   color: rgb(128, 77, 143);
   font-size: 1.5rem;
+}
+body main #diff {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: rgb(128, 77, 143);
+  background-color: rgb(183, 233, 252);
+  width: max-content;
+  margin: 1rem auto 2rem auto;
+  padding: 0.25rem 0.5rem;
+  border: 1px dotted rgb(128, 77, 143);
+  border-radius: 0.25rem;
+  transform: scaleX(0);
 }
 body main #backBTN {
   padding: 0.5rem 1rem;
