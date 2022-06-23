@@ -13,51 +13,12 @@ const maleTable = document.querySelectorAll("#maleTable .bmi-range");
 const button = document.querySelector("#submit");
 const height = document.querySelector("#height");
 const weight = document.querySelector("#weight");
-let gender = "";
-let age = 0;
 let compare;
 
 function getBMI() {
   const resultBMI =
     parseInt(weight.value) / Math.pow(parseInt(height.value) / 100, 2);
   return resultBMI;
-}
-
-function checkWeight(arr) {
-  for (ele of arr) {
-    const bmiRange = ele.textContent.split("-");
-    if (age != "") {
-      if (compare > bmiRange[0] && compare <= bmiRange[1]) {
-        bmiStatus.textContent = "Normalgewicht";
-      } else if (compare < parseFloat(bmiRange[0])) {
-        bmiStatus.textContent = "Untergewicht";
-      } else if (
-        compare > parseFloat(bmiRange[1]) &&
-        compare <= parseFloat(bmiRange[1]) + 5
-      ) {
-        bmiStatus.textContent = "Übergewicht";
-      } else if (
-        compare > parseFloat(bmiRange[1]) + 5 &&
-        compare <= parseFloat(bmiRange[1]) + 10
-      ) {
-        bmiStatus.textContent = "Starkes Übergewicht";
-      } else if (compare > parseFloat(bmiRange[1]) + 10) {
-        bmiStatus.textContent = "Adipositas";
-      }
-    } else {
-      if (compare < 18.5) {
-        bmiStatus.textContent = "Untergewicht";
-      } else if (compare >= 18.5 && compare < 25) {
-        bmiStatus.textContent = "Normalgewicht";
-      } else if (compare >= 25 && compare < 30) {
-        bmiStatus.textContent = "Übergewicht";
-      } else if (compare >= 30 && compare < 35) {
-        bmiStatus.textContent = "Übergewicht";
-      } else if (compare > 35) {
-        bmiStatus.textContent = "Adipositas";
-      }
-    }
-  }
 }
 
 function change() {
@@ -105,31 +66,28 @@ function showScore(event) {
 
   result.textContent = getBMI().toFixed(2);
 
+  change();
+
   if (!isNaN(compare)) {
     form.style.display = "none";
     backBtn.style.transform = "scale(1)";
+    localStorage.setItem("previous", compare);
   } else {
     result.textContent = "";
     bmiStatus.textContent = "Bitte tragen Sie Ihren Gewicht und Größe ein!";
   }
 
-  change();
-  if (!isNaN(compare)) {
-    localStorage.setItem("previous", compare);
-  }
+  let age = 0;
+  ageValue != "" ? (age += parseInt(ageValue)) : age;
 
-  if (ageValue != "") {
-    age += parseInt(ageValue);
-  } else {
-    age;
-  }
-
+  let gender = "";
   if (male.checked) {
     gender = "male";
   } else if (female.checked) {
     gender = "female";
   }
 
+  let currentTable;
   switch (gender) {
     case "male":
       if (displayDefault.style.transform == "scaleX(1)") {
@@ -137,7 +95,7 @@ function showScore(event) {
       }
       displayMale.style.transform = "scaleX(1)";
       displayMale.style.transition = "transform 0.75s ease-in-out";
-      checkWeight(maleTable);
+      currentTable = displayMale;
       break;
     case "female":
       if (displayDefault.style.transform == "scaleX(1)") {
@@ -145,16 +103,16 @@ function showScore(event) {
       }
       displayFemale.style.transform = "scaleX(1)";
       displayFemale.style.transition = "transform 0.75s ease-in-out";
-      checkWeight(femaleTable);
+      currentTable = displayFemale;
       break;
     default:
       displayDefault.style.transform = "scaleX(1)";
       displayDefault.style.transition = "transform 0.75s ease-in-out";
-      checkWeight(defaultTable);
+      currentTable = displayDefault;
       break;
   }
 
-  const range = document.querySelectorAll(".age-range");
+  const range = currentTable.querySelectorAll(".age-range");
   for (ele of range) {
     const ageRange = ele.textContent.split("-");
     if (
@@ -162,6 +120,38 @@ function showScore(event) {
       (ageRange.length == 1 && age >= ageRange[0].substring(2))
     ) {
       ele.parentNode.style.backgroundColor = "skyblue";
+      const eleParent = ele.parentNode
+        .querySelector(".bmi-range")
+        .textContent.split("-");
+      if (compare > eleParent[0] && compare <= eleParent[1]) {
+        bmiStatus.textContent = "Normalgewicht";
+      } else if (compare < parseFloat(eleParent[0])) {
+        bmiStatus.textContent = "Untergewicht";
+      } else if (
+        compare > parseFloat(eleParent[1]) &&
+        compare <= parseFloat(eleParent[1]) + 5
+      ) {
+        bmiStatus.textContent = "Übergewicht";
+      } else if (
+        compare > parseFloat(eleParent[1]) + 5 &&
+        compare <= parseFloat(eleParent[1]) + 10
+      ) {
+        bmiStatus.textContent = "Starkes Übergewicht";
+      } else if (compare > parseFloat(eleParent[1]) + 10) {
+        bmiStatus.textContent = "Adipositas";
+      }
+    } else {
+      if (compare < 18.5) {
+        bmiStatus.textContent = "Untergewicht";
+      } else if (compare >= 18.5 && compare < 25) {
+        bmiStatus.textContent = "Normalgewicht";
+      } else if (compare >= 25 && compare < 30) {
+        bmiStatus.textContent = "Übergewicht";
+      } else if (compare >= 30 && compare < 35) {
+        bmiStatus.textContent = "Übergewicht";
+      } else if (compare > 35) {
+        bmiStatus.textContent = "Adipositas";
+      }
     }
   }
 }
@@ -178,8 +168,8 @@ function reset() {
   displayMale.style.transition = "transform 0s";
   displayFemale.style.transition = "transform 0s";
   displayDefault.style.transition = "transform 0s";
+  backBTN.style.transform = "scaleX(0)";
   bmiDiff.style.transform = "scaleX(0)";
-  backBtn.style.transform = "scaleX(0)";
   bmiDiff.textContent = "";
   const range = document.querySelectorAll(".age-range");
   for (ele of range) {
