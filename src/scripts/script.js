@@ -178,6 +178,8 @@ function reset() {
   displayMale.style.transition = "transform 0s";
   displayFemale.style.transition = "transform 0s";
   displayDefault.style.transition = "transform 0s";
+  bmiDiff.style.transform = "scaleX(0)";
+  backBtn.style.transform = "scaleX(0)";
   bmiDiff.textContent = "";
   const range = document.querySelectorAll(".age-range");
   for (ele of range) {
