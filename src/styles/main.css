@@ -192,10 +192,6 @@ body footer {
   line-height: 2rem;
   padding-left: 2rem;
   margin-top: 2rem;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
 }
 @media (max-width: 767px) {
   body footer {
