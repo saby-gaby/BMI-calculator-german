@@ -1,43 +1,45 @@
 const result = document.querySelector("#result");
 const bmiStatus = document.querySelector("#status");
+const firstChild = document.querySelector("#firstChild");
 const bmiDiff = document.querySelector("#diff");
 const form = document.querySelector("#rechner");
 const resBmi = document.querySelector("#res");
 const backBtn = document.querySelector("#backBTN");
 const displayDefault = document.querySelector("#defaultTable");
+const defaultTable = document.querySelectorAll("#defaultTable .bmi-range");
 const displayFemale = document.querySelector("#femaleTable");
+const femaleTable = document.querySelectorAll("#femaleTable .bmi-range");
 const displayMale = document.querySelector("#maleTable");
+const maleTable = document.querySelectorAll("#maleTable .bmi-range");
 const button = document.querySelector("#submit");
 const height = document.querySelector("#height");
 const weight = document.querySelector("#weight");
-let compare;
+let currentBmi;
 
 function getBMI() {
   const resultBMI =
-    parseInt(weight.value) / Math.pow(parseInt(height.value) / 100, 2);
+    parseFloat(weight.value) / Math.pow(parseInt(height.value) / 100, 2);
   return resultBMI;
 }
 
 function change() {
-  const getPreviousBmi = localStorage.getItem("previous");
+  const previousBmi = localStorage.getItem("previous");
+  const getPreviousHeight = localStorage.getItem("height");
+
   try {
-    if (isNaN(compare)) {
+    if (!currentBmi) {
       bmiDiff = "";
     } else {
       bmiDiff.style.transform = "scaleX(1)";
       bmiDiff.style.transition = "transform 0.75s ease-in-out";
 
-      if (getPreviousBmi != null && !isNaN(getPreviousBmi)) {
-        const diff = compare - getPreviousBmi;
+      if (previousBmi && getPreviousHeight == height.value) {
+        const diff = currentBmi.toFixed(2) - previousBmi;
 
-        if (diff > 0) {
-          bmiDiff.textContent = `Ihr Körperfettindex ist um ${diff.toFixed(
-            2
-          )} gestiegen.`;
-        } else if (diff < 0) {
+        if (diff != 0) {
           bmiDiff.textContent = `Ihr Körperfettindex ist um ${Math.abs(
             diff.toFixed(2)
-          )} gesunken.`;
+          )} ${diff > 0 ? "gestiegen" : "gesunken"}.`;
         } else {
           bmiDiff.textContent = "Ihr Körperfettindex ist gleich geblieben.";
         }
@@ -46,7 +48,7 @@ function change() {
       }
     }
   } catch {
-    console.error(`Etwas ist schief gegangen :(`);
+    console.error(`Etwas ist schief gelaufen :(`);
   }
 }
 
@@ -57,7 +59,7 @@ function showScore(event) {
   const male = document.querySelector("#m");
   const female = document.querySelector("#f");
 
-  compare = getBMI();
+  currentBmi = getBMI();
   resBmi.style.transform = "scale(1)";
   resBmi.style.transition = "transform 0.75s ease-in-out";
 
@@ -65,17 +67,22 @@ function showScore(event) {
 
   change();
 
-  if (!isNaN(compare)) {
+  if (currentBmi) {
     form.style.display = "none";
     backBtn.style.transform = "scale(1)";
-    localStorage.setItem("previous", compare);
+    firstChild.textContent = "Dein BMI ist:";
+    localStorage.setItem("previous", currentBmi.toFixed(2));
+    localStorage.setItem("height", height.value);
+    bmiStatus.textContent = "";
   } else {
     result.textContent = "";
     bmiStatus.textContent = "Bitte tragen Sie Ihren Gewicht und Größe ein!";
+    firstChild.textContent = "";
+    localStorage.clear();
   }
 
   let age = 0;
-  ageValue != "" ? (age += parseInt(ageValue)) : age;
+  ageValue ? (age += parseInt(ageValue)) : age;
 
   let gender = "";
   if (male.checked) {
@@ -84,20 +91,26 @@ function showScore(event) {
     gender = "female";
   }
 
+  if (gender && gender != localStorage.getItem("gender")) {
+    bmiDiff.textContent = "Sie haben keine vorherigen Anfragen!";
+    localStorage.setItem("gender", gender);
+  } else if (gender && !localStorage.getItem("gender")) {
+    localStorage.setItem("gender", gender);
+  } else if (!gender) {
+    localStorage.removeItem("gender");
+    bmiDiff.textContent = "Sie haben keine vorherigen Anfragen!";
+  }
+
   let currentTable;
   switch (gender) {
     case "male":
-      if (displayDefault.style.transform == "scaleX(1)") {
-        displayDefault.style.transform = "scaleX(0)";
-      }
+      displayDefault.style.transform = "scaleX(0)";
       displayMale.style.transform = "scaleX(1)";
       displayMale.style.transition = "transform 0.75s ease-in-out";
       currentTable = displayMale;
       break;
     case "female":
-      if (displayDefault.style.transform == "scaleX(1)") {
-        displayDefault.style.transform = "scaleX(0)";
-      }
+      displayDefault.style.transform = "scaleX(0)";
       displayFemale.style.transform = "scaleX(1)";
       displayFemale.style.transition = "transform 0.75s ease-in-out";
       currentTable = displayFemale;
@@ -112,42 +125,24 @@ function showScore(event) {
   const range = currentTable.querySelectorAll(".age-range");
   for (ele of range) {
     const ageRange = ele.textContent.split("-");
+
     if (
-      (ageRange.length > 1 && age >= ageRange[0] && age <= ageRange[1]) ||
+      (ageRange.length > 1 && age >= ageRange[0] && age < ageRange[1]) ||
       (ageRange.length == 1 && age >= ageRange[0].substring(2))
     ) {
       ele.parentNode.style.backgroundColor = "skyblue";
       const eleParent = ele.parentNode
         .querySelector(".bmi-range")
         .textContent.split("-");
-      if (compare > eleParent[0] && compare <= eleParent[1]) {
-        bmiStatus.textContent = "Normalgewicht";
-      } else if (compare < parseFloat(eleParent[0])) {
-        bmiStatus.textContent = "Untergewicht";
-      } else if (
-        compare > parseFloat(eleParent[1]) &&
-        compare <= parseFloat(eleParent[1]) + 5
+      if (
+        currentBmi > parseFloat(eleParent[0]) &&
+        currentBmi < parseFloat(eleParent[1])
       ) {
-        bmiStatus.textContent = "Übergewicht";
-      } else if (
-        compare > parseFloat(eleParent[1]) + 5 &&
-        compare <= parseFloat(eleParent[1]) + 10
-      ) {
-        bmiStatus.textContent = "Starkes Übergewicht";
-      } else if (compare > parseFloat(eleParent[1]) + 10) {
-        bmiStatus.textContent = "Adipositas";
-      }
-    } else {
-      if (compare < 18.5) {
-        bmiStatus.textContent = "Untergewicht";
-      } else if (compare >= 18.5 && compare < 25) {
         bmiStatus.textContent = "Normalgewicht";
-      } else if (compare >= 25 && compare < 30) {
+      } else if (currentBmi < parseFloat(eleParent[0])) {
+        bmiStatus.textContent = "Untergewicht";
+      } else if (currentBmi > parseFloat(eleParent[1])) {
         bmiStatus.textContent = "Übergewicht";
-      } else if (compare >= 30 && compare < 35) {
-        bmiStatus.textContent = "Übergewicht";
-      } else if (compare > 35) {
-        bmiStatus.textContent = "Adipositas";
       }
     }
   }
@@ -165,8 +160,10 @@ function reset() {
   displayMale.style.transition = "transform 0s";
   displayFemale.style.transition = "transform 0s";
   displayDefault.style.transition = "transform 0s";
-  backBTN.style.transform = "scaleX(0)";
+  backBtn.style.transform = "scaleX(0)";
   bmiDiff.style.transform = "scaleX(0)";
+  backBtn.style.transition = "transform 0s";
+  bmiDiff.style.transition = "transform 0s";
   bmiDiff.textContent = "";
   const range = document.querySelectorAll(".age-range");
   for (ele of range) {
@@ -175,3 +172,5 @@ function reset() {
 }
 
 backBtn.addEventListener("click", reset);
+
+document.querySelector("footer > span").textContent = new Date().getFullYear();
