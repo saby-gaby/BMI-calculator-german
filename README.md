@@ -1,37 +1,56 @@
-# project-BMI
+# BMI-Calculator
 
-## Aufgabenstellung - Teil 1
-Schreibe eine HTML Seite für einen BMI Rechner.
 
-Die HTML Seite muss erklären, worum es sich beim BMI handelt und wie er sich berechnet.
+**[Test this app yourself](https://saby-gaby.github.io/BMI-calculator-german/)**
 
-Anschließend muss die HTML Seite zwei Eingabefelder für das Gewicht und die Höhe haben und einen Button zur Berechnung.
+---
 
-Optional kannst du eine Tabelle erstellen, die den Normalbereich nach Altersgruppe anzeigt.
+#### Navigation
 
-Quelle: https://bmirechner.net/bmi-tabelle
+- About Project
+  - _Description_
+- How to use this Project
+  - _Description_
+- Developed With
+- Contact
+  - _GitHub_
+- Used Tools
+  - _Fonts_
 
-## Aufgabenstellung - Teil 2
-Verwende CSS oder Sass, um deiner Seite Style zu verleihen.
+---
 
-Beim Hovern über die Eingabefelder und den Button, soll die Farbe der Elemente verändert werden.
+### About Project
 
-Achte auf guten Kontrast bei der Farbwahl.
+Creating a calculator that calculates body fat index based on a person's height, weight and optionally age.
 
-Verleihe deiner Seite einen Hintergrund und style optional die Tabelle.
+### How to use this Project
 
-## Aufgabenstellung - Teil 3
-Erstelle eine neue JavaScript Datei und schreibe eine Funktion für die Berechnung des BMI.
+You can start the BMI-Calculator live [here](https://saby-gaby.github.io/BMI-calculator-german/) and calculate your BMI.
 
-Sie soll über getElementById() die eingegebene Größe und Gewicht laden.
+##### Developed With
 
-Anschließend soll sie den BMI berechnen und über .innerHTML das errechnete Ergebnis in die HTML laden.
+- [x] _HTML5_
+- [x] _CSS3_
+- [ ] _SASS_
+- [x] _SCSS_
+- [x] _JavaScript_
+- [x] _DOM_
+- [x] _Local Storage_
 
-Die Funktion wird über das onClick-Event des Buttons ausgeführt.
+---
 
-## Aufgabenstellung - Teil 4
-Teste deine Webseite.
+### Contact
 
-Publiziere sie anschließend mit GitHub Pages.
+GitHub: <https://github.com/saby-gaby> <br>
 
-Viel Spaß!
+---
+
+### Used Tools
+
+- [Google Fonts](https://fonts.google.com/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+
+---
+
+Made by [saby-gaby](https://github.com/saby-gaby)
+
